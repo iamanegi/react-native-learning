@@ -9,8 +9,16 @@ export default function App() {
   function addGoalHandler(enteredGoalText) {
     let goal = enteredGoalText.trim();
     if (goal != "") {
-      setGoalsList(() => [...goalsList, { text: goal, id: goalsList.length }]);
+      setGoalsList(() => [...goalsList, { text: goal, id: Math.random().toString() }]);
     }
+  }
+
+  function deleteGoalHandler(index) {
+    setGoalsList(() => {
+      goalsList.splice(index, 1);
+      return [...goalsList];
+    });
+    console.log(`DELTED: ${index}`)
   }
 
   return (
@@ -29,7 +37,13 @@ export default function App() {
            * - mapping the key field with the key using ketExtractor
            */
           renderItem={(itemData) => {
-            return <GoalItem text={itemData.item.text} />;
+            return (
+              <GoalItem
+                index={itemData.index}
+                text={itemData.item.text}
+                onDeleteItem={deleteGoalHandler}
+              />
+            );
           }}
           showsVerticalScrollIndicator={false}
         />
