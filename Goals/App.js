@@ -1,21 +1,27 @@
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { useState } from "react";
 
 export default function App() {
   const [enteredGoalText, setEnteredGoalText] = useState("");
+  const [goalsList, setGoalsList] = useState([]);
 
   function goalInputHandler(inputText) {
     setEnteredGoalText(inputText);
   }
 
   function addGoalHandler() {
-    console.log(enteredGoalText);
+    let goal = enteredGoalText.trim();
+    if (goal != "") {
+      setGoalsList(() => [...goalsList, goal]);
+      setEnteredGoalText("");
+    }
   }
 
   return (
     <View style={styles.appContainer}>
       <View style={styles.inputContainer}>
         <TextInput
+          value={enteredGoalText}
           placeholder="Enter your task"
           style={styles.textInput}
           onChangeText={goalInputHandler}
@@ -23,7 +29,14 @@ export default function App() {
         <Button title="Add Task" style={styles.button} onPress={addGoalHandler} />
       </View>
       <View style={styles.listContainer}>
-        <Text>List of goals:</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {goalsList.map((goal, index) => (
+            <View key={index} style={styles.listItem}>
+              {/* the Text is wrapped inside the View element because there is no native mappable property of Text element for borderRadius in iOS */}
+              <Text style={styles.listText}>{goal}</Text>
+            </View>
+          ))}
+        </ScrollView>
       </View>
     </View>
   );
@@ -31,7 +44,8 @@ export default function App() {
 
 const styles = StyleSheet.create({
   appContainer: {
-    padding: 16,
+    paddingTop: 16,
+    paddingHorizontal: 16,
     marginTop: 56,
     flex: 1,
     flexDirection: "column",
@@ -47,7 +61,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 9,
-    marginTop: 16,
   },
   textInput: {
     borderWidth: 1,
@@ -59,5 +72,15 @@ const styles = StyleSheet.create({
   },
   button: {
     alignContent: "center",
+  },
+  listItem: {
+    padding: 8,
+    marginTop: 8,
+    borderRadius: 6,
+    backgroundColor: "cornflowerblue",
+    fontSize: 16,
+  },
+  listText: {
+    color: "white",
   },
 });
