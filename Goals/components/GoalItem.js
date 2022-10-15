@@ -7,7 +7,7 @@ function GoalItem(props) {
       <Pressable
         android_ripple={{ color: "darkgreyr" }}
         onPress={props.onDeleteItem.bind(this, props.index)}
-        style={({pressed}) => pressed && styles.pressedListItem}
+        style={({ pressed }) => pressed && styles.pressedListItem}
       >
         {/* .bind() allows us to preconfigure a function for future execution. The first value in the bind function sets the this keyword in the function */}
         <Text style={styles.listText}>{props.text}</Text>
@@ -22,11 +22,11 @@ const styles = StyleSheet.create({
   listItem: {
     marginTop: 8,
     borderRadius: 6,
-    backgroundColor: "cornflowerblue",
+    backgroundColor: "peru",
     fontSize: 16,
   },
   pressedListItem: {
-    opacity: 0.5
+    opacity: 0.5,
   },
   listText: {
     color: "white",
