@@ -5,10 +5,21 @@ import Colors from "./constants/colors";
 import GameScreen from "./screens/GameScreen";
 import GameOverScreen from "./screens/GameOverScreen";
 import StartGameScreen from "./screens/StartGameScreen";
+import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
 
 export default function App() {
   const [userNumber, setUserNumber] = useState();
   const [isGameOver, setIsGameOver] = useState(true);
+
+  const [fontsLoaded] = useFonts({
+    poppins: require("./assets/fonts/Poppins-Regular.ttf"),
+    "poppins-bold": require("./assets/fonts/Poppins-Bold.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   function numberPicketHandler(pickedNumber) {
     setUserNumber(pickedNumber);
@@ -22,10 +33,10 @@ export default function App() {
   let screen = <StartGameScreen onConfirmNumber={numberPicketHandler} />;
 
   if (userNumber) {
-    screen = <GameScreen userNumber={userNumber} onGameOver={gameOverHandler}/>;
+    screen = <GameScreen userNumber={userNumber} onGameOver={gameOverHandler} />;
   }
   if (isGameOver && userNumber) {
-    screen = <GameOverScreen/>
+    screen = <GameOverScreen />;
   }
 
   return (
