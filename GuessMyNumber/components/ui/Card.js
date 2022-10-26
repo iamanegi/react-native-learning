@@ -6,9 +6,8 @@ export default function Card({ children }) {
 }
 
 const styles = StyleSheet.create({
-    card: {
+  card: {
     margin: 16,
-    marginVertical: 90,
     padding: 16,
     backgroundColor: Colors.primary800,
     borderRadius: 8,

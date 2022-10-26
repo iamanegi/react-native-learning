@@ -1,18 +1,32 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Title from "../components/ui/Title";
 import Colors from "../constants/colors";
 
 export default function GameOverScreen({ rounds, userNumber, onStartNewGame }) {
+  const { width, height } = useWindowDimensions();
+
+  let imageSize = 300;
+
+  if (width < 380) {
+    imageSize = 150;
+  }
+
+  if (height < 400) {
+    imageSize = 80;
+  }
+
+  const imageStyle = { width: imageSize, height: imageSize, borderRadius: imageSize / 2 };
+
   return (
     <View style={styles.container}>
       <Title>GAME OVER!</Title>
-      <View style={styles.imageContainer}>
+      <View style={[styles.imageContainer, imageStyle]}>
         <Image source={require("../assets/images/success.png")} style={styles.image} />
       </View>
       <Text style={styles.summaryText}>
-        Your phone needed <Text style={styles.highlightedText}>{rounds}</Text> rounds to guess the number{" "}
-        <Text style={styles.highlightedText}>{userNumber}</Text>.
+        Your phone needed <Text style={styles.highlightedText}>{rounds}</Text> rounds to guess the
+        number <Text style={styles.highlightedText}>{userNumber}</Text>.
       </Text>
       <View style={{ flexDirection: "row" }}>
         <PrimaryButton onPress={onStartNewGame}>Start New Game</PrimaryButton>
@@ -20,6 +34,8 @@ export default function GameOverScreen({ rounds, userNumber, onStartNewGame }) {
     </View>
   );
 }
+
+// const deviceWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   container: {
@@ -29,9 +45,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imageContainer: {
-    width: 300,
-    height: 300,
-    borderRadius: 150,
+    // width: deviceWidth < 380 ? 150 : 300,
+    // height: deviceWidth < 380 ? 150 : 300,
+    // borderRadius: deviceWidth < 380 ? 75 : 150,12
     borderWidth: 3,
     borderColor: Colors.primary800,
     overflow: "hidden",
