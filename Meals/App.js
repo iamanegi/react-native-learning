@@ -1,11 +1,50 @@
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
 import CategoriesScreen from "./screens/CategoriesScreen";
+import FavouritesScreen from "./screens/FavouritesScreen";
+import MealDetailsScreen from "./screens/MealDetailsScreen";
 import MealsOverviewScreen from "./screens/MealsOverviewScreen";
+import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function DrawerNavigator() {
+  return (
+    <Drawer.Navigator
+      useLegacyImplementation={true}
+      screenOptions={{
+        headerStyle: { backgroundColor: "#808080" },
+        headerTintColor: "black",
+        contentStyle: { backgroundColor: "#cccccc" },
+        drawerContentStyle: { backgroundColor: "#cccccc" },
+        drawerActiveBackgroundColor: "#1b1b1b",
+        drawerActiveTintColor: "white",
+        drawerInactiveTintColor: "black",
+      }}
+    >
+      <Drawer.Screen
+        name="MealsCategories"
+        component={CategoriesScreen}
+        options={{
+          title: "All Categories",
+          drawerIcon: ({ color, size }) => <Ionicons name="list" color={color} size={size} />,
+        }}
+      />
+      <Drawer.Screen
+        name="Favourites"
+        component={FavouritesScreen}
+        options={{
+          title: "Favourites",
+          drawerIcon: ({ color, size }) => <Ionicons name="star" color={color} size={size} />,
+        }}
+      />
+    </Drawer.Navigator>
+  );
+}
 
 export default function App() {
   return (
@@ -14,7 +53,6 @@ export default function App() {
       <NavigationContainer>
         {/* default screen can be set either by setting as the top most entry in the Stack.Navifator or using initialRouteName */}
         <Stack.Navigator
-          initialRouteName="MealsCategories"
           screenOptions={{
             headerStyle: { backgroundColor: "#808080" },
             headerTintColor: "black",
@@ -22,11 +60,9 @@ export default function App() {
           }}
         >
           <Stack.Screen
-            name="MealsCategories"
-            component={CategoriesScreen}
-            options={{
-              title: "Meal Categories",
-            }}
+            name="Drawer"
+            component={DrawerNavigator}
+            options={{ title: "Back", headerShown: false }}
           />
           <Stack.Screen
             name="MealsOverview"
@@ -39,6 +75,7 @@ export default function App() {
             //   };
             // }}
           />
+          <Stack.Screen name="MealDetails" component={MealDetailsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
