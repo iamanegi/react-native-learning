@@ -9,6 +9,8 @@ import MealDetailsScreen from "./screens/MealDetailsScreen";
 import MealsOverviewScreen from "./screens/MealsOverviewScreen";
 import { Ionicons } from "@expo/vector-icons";
 import FavouritesContextProvider from "./store/context/favourite-context";
+import { Provider } from "react-redux";
+import { store } from "./store/redux/store";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -51,7 +53,8 @@ export default function App() {
   return (
     <>
       <StatusBar style="dark" />
-      <FavouritesContextProvider>
+      {/* <FavouritesContextProvider> context based state management */}
+      <Provider store={store}>
         <NavigationContainer>
           {/* default screen can be set either by setting as the top most entry in the Stack.Navifator or using initialRouteName */}
           <Stack.Navigator
@@ -80,7 +83,8 @@ export default function App() {
             <Stack.Screen name="MealDetails" component={MealDetailsScreen} />
           </Stack.Navigator>
         </NavigationContainer>
-      </FavouritesContextProvider>
+      </Provider>
+      {/* </FavouritesContextProvider> context based state management */}
     </>
   );
 }
