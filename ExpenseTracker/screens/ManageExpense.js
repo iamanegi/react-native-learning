@@ -1,11 +1,16 @@
-import { useContext, useLayoutEffect } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import ErrorOverlay from "../components/ui/ErrorOverlay";
 import ExpenseForm from "../components/ui/ExpenseForm";
 import IconButton from "../components/ui/IconButton";
+import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { GlobalStyles } from "../constants/styles";
 import { ExpensesContext } from "../store/expenses-context";
+import { deleteExpense, storeExpense, updateExpense } from "../utils/http";
 
 export default function ManageExpense({ navigation, route }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState();
   const expenseCtx = useContext(ExpensesContext);
 
   const expenseId = route.params?.expenseId;
@@ -19,22 +24,52 @@ export default function ManageExpense({ navigation, route }) {
     });
   }, [navigation, isEditing]);
 
-  function deleteExpenseHandler() {
-    expenseCtx.deleteExpense(expenseId);
-    navigation.goBack();
+  async function deleteExpenseHandler() {
+    setIsSubmitting(true);
+    try {
+      await deleteExpense(expenseId);
+      expenseCtx.deleteExpense(expenseId);
+      navigation.goBack();
+    } catch (error) {
+      setError("Failed to delete the expense.");
+      setIsSubmitting(false);
+    }
   }
 
   function cancelHandler() {
     navigation.goBack();
   }
 
-  function confirmHandler(expenseData) {
-    if (isEditing) {
-      expenseCtx.updateExpense(expenseId, expenseData);
-    } else {
-      expenseCtx.addExpense(expenseData);
+  async function confirmHandler(expenseData) {
+    setIsSubmitting(true);
+    try {
+      if (isEditing) {
+        expenseCtx.updateExpense(expenseId, expenseData);
+        await updateExpense(expenseId, expenseData);
+      } else {
+        const id = await storeExpense(expenseData);
+        expenseCtx.addExpense({ ...expenseData, id: id });
+      }
+      navigation.goBack();
+    } catch (error) {
+      setError(`Failed to ${isEditing ? "update" : "add"} the expense.`);
+      setIsSubmitting(false);
     }
-    navigation.goBack();
+  }
+
+  if (error && !isSubmitting) {
+    return (
+      <ErrorOverlay
+        message={error}
+        onConfirm={() => {
+          setError(null);
+        }}
+      />
+    );
+  }
+
+  if (isSubmitting) {
+    return <LoadingOverlay />;
   }
 
   return (
