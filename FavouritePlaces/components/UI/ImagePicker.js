@@ -14,7 +14,10 @@ export default function ImagePicker() {
       return permissionResponse.granted;
     }
     if (cameraPermissionInfo.status === PermissionStatus.DENIED) {
-      Alert.alert("Permission Not Granted!", "You have not granted the persmission to the app.");
+      Alert.alert(
+        "Permission Not Granted!",
+        "You have not granted the camera persmission to the app."
+      );
       return false;
     }
     return true;
