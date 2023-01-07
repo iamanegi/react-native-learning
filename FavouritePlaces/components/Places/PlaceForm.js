@@ -8,7 +8,7 @@ import LocationPicker from "./LocationPicker";
 
 export default function PlaceForm({ onCreatePlace }) {
   const [enteredTitle, setEnteredTitle] = useState("");
-  const [selectedImage, setSelectedImage] = useState();
+  const [selectedImage, setSelectedImage] = useState("");
   const [pickedLocation, setPickedLocation] = useState();
 
   function changeTitleHandler(enteredText) {
@@ -24,7 +24,7 @@ export default function PlaceForm({ onCreatePlace }) {
   }, []);
 
   function savePlaceHandler() {
-    const placeData = new Place(enteredTitle, selectedImage, pickedLocation);
+    const placeData = new Place(enteredTitle, selectedImage, pickedLocation, "101");
     onCreatePlace(placeData);
   }
 

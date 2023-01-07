@@ -3,8 +3,16 @@ import { Colors } from "../../constants/colors";
 
 export default function PlaceItem({ place, onSelect }) {
   return (
-    <Pressable style={({ pressed }) => [styles.item, pressed && styles.pressed]} onPress={onSelect}>
-      <Image style={styles.image} source={{ uri: place.imageUri }} />
+    <Pressable
+      style={({ pressed }) => [styles.item, pressed && styles.pressed]}
+      onPress={onSelect.bind(this, place.id)}
+    >
+      <Image
+        style={styles.image}
+        source={
+          place.imageUri != "" ? { uri: place.imageUri } : require("./../../assets/placeholder.jpg")
+        }
+      />
       <View style={styles.info}>
         <Text style={styles.title}>{place.title}</Text>
         <Text style={styles.address}>{place.address}</Text>
